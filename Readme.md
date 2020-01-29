@@ -5,7 +5,7 @@ Here is the technical instructions to build a master hub connecting several tang
 
 # Part 1 : Rapsberry (master)
 To be able to listen to Firebase Event, we need to install Python3 on the Rapsberry PI. (If not already)   
-[Original detailed process](https://gist.github.com/SeppPenner/6a5a30ebc8f79936fa136c524417761d) -
+[Original detailed process](https://gist.github.com/SeppPenner/6a5a30ebc8f79936fa136c524417761d) 
 ```sh
 sudo apt-get update -y
 sudo apt-get install build-essential tk-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libffi-dev -y
@@ -30,7 +30,8 @@ Install all requirements within that new virtualenv.
 ```sh
 pip install -r requirements.txt
 ```
-Run the python script for the master. It should connect to the `n` I2C slaves and listen for Firebase events.
+Run the python script for the master. It should connect to the `n` I2C slaves and listen for Firebase events.  
+> [The original firebase streaming](https://github.com/andrewsosa/firebase-python-streaming) by Andrew Sosa
 ```sh
 python master.py
 ```
