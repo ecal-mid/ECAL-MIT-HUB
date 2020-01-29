@@ -1,4 +1,4 @@
-# ECAL / MIT HUB
+# ECAL / M.I.T. HUB
 
 **“Explore networked communication in an art and design context”**   
 Here is the technical instructions to build a master hub connecting several tangible (or web based) inputs/outputs.
