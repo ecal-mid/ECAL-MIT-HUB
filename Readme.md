@@ -36,6 +36,13 @@ Run the python script for the master. It should connect to the `n` I2C slaves an
 cd pythonFolder
 python master.py
 ```
+
+Following that idea to keep all connection as simple as possible, we propose to use a minimal amount of GPIO pin to connect the I2C network. In that example :  
+* GPIO 02
+* GPIO 03  
+* Ground  
+<img width="908" alt="Capture d’écran 2020-01-29 à 23 19 03" src="https://user-images.githubusercontent.com/5444221/73402688-22b29500-42ee-11ea-9905-94bb3b0cd77a.png">
+
 # Part 2 : Arduino (slave)
 # Part 3 : Firebase (connector)
 # Part 4 : Web based app
