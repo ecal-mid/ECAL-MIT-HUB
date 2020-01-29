@@ -44,6 +44,10 @@ Following that idea to keep all connection as simple as possible, we propose to 
 <img width="908" alt="Capture d’écran 2020-01-29 à 23 19 03" src="https://user-images.githubusercontent.com/5444221/73402688-22b29500-42ee-11ea-9905-94bb3b0cd77a.png">
 
 # Part 2 : Arduino (slave)
+W.I.P
 # Part 3 : Firebase (connector)
+W.I.P
 # Part 4 : Web based app
+W.I.P
 # Part 5 : Routing Editor
+W.I.P
