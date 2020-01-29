@@ -35,6 +35,7 @@ Run the python script for the master. It should connect to the `n` I2C slaves an
 ```sh
 python master.py
 ```
+> The original firebase streaming (https://github.com/andrewsosa/firebase-python-streaming)
 # Part 2 : Arduino (slave)
 # Part 3 : Firebase (connector)
 # Part 4 : Web based app
