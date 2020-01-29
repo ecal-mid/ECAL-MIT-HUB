@@ -1,10 +1,10 @@
 # ECAL / MIT HUB
 
-**“Explore networked communication in an art and design context”**
+**“Explore networked communication in an art and design context”**   
 Here is the technical instructions to build a master hub connecting several tangible (or web based) inputs/outputs.
 
 # Part 1 : Rapsberry (master)
-To be able to listen to Firebase Event, we need to install Python3 on the Rapsberry PI. (If not already)
+To be able to listen to Firebase Event, we need to install Python3 on the Rapsberry PI. (If not already)   
 [Original detailed process](https://gist.github.com/SeppPenner/6a5a30ebc8f79936fa136c524417761d) -
 ```sh
 sudo apt-get update -y
@@ -18,7 +18,7 @@ cd Python-3.7.4
 make -j 4
 sudo make altinstall
 ```
-To separate previous python installation, we'll use a virtual environment.
+To separate previous python installation, we'll use a virtual environment.  
 To be able to install a virtual environment we'll use the package installer pip.
 ```sh
 sudo apt install python3-pip
