@@ -30,7 +30,7 @@ Install all requirements within that new virtualenv.
 ```sh
 pip install -r requirements.txt
 ```
-Run the python script for the master. It should connect to the `n` I2C slaves and listen for Firebase events.  
+Run the python script for the master. It should connect to the `n` I2C subordinates and listen for Firebase events.  
 > [The original firebase streaming](https://github.com/andrewsosa/firebase-python-streaming) by Andrew Sosa
 ```sh
 cd pythonFolder
