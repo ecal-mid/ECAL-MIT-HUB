@@ -50,16 +50,16 @@ cb = fb.child("light").listener(light_toggle)
 cb.start()
 
 #Listen to slave messages
-sleep(2)
-while 1:
-    try:
-        data = bus.read_i2c_block_data(addr2,5,2)
-        print('Offset2 {}, data {}'.format(data[0],data[1]))
-    except:
-        print('cannot read 0x9')
-    try:
-        data = bus.read_i2c_block_data(addr1,5,2)
-        print('Offset1 {}, data {}'.format(data[0],data[1]))
-    except:
-        print('cannot read 0x8')
-    sleep(0.05)
+#sleep(2)
+#while 1:
+#    try:
+#        data = bus.read_i2c_block_data(addr2,5,2)
+#        print('Offset2 {}, data {}'.format(data[0],data[1]))
+#    except:
+#        print('cannot read 0x9')
+#    try:
+#        data = bus.read_i2c_block_data(addr1,5,2)
+#        print('Offset1 {}, data {}'.format(data[0],data[1]))
+#    except:
+#        print('cannot read 0x8')
+#    sleep(0.05)
