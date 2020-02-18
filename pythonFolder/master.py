@@ -6,6 +6,8 @@ fb = Firebase("https://esptest-73b9b.firebaseio.com/")
 
 addr1=0x8
 addr2=0x9
+addr3=0x10
+addr4=0x11
 bus = SMBus(1)
 numb = 1
 print("start")
@@ -13,7 +15,7 @@ print("start")
 
 def light_toggle(_val):
     
-    print("hello git hub 011",_val)
+    print("hello git hub 012",_val)
     data = json.loads(_val[1])
     print(data['path'])
     print(data['data'])
@@ -33,6 +35,18 @@ def light_toggle(_val):
         except:
             print('problem with bus 2')
         print("2 from fb")
+    elif str(val) == "3":
+        try:
+            bus.write_byte(addr3,0x1)
+        except:
+            print('problem with bus 2')
+        print("2 from fb")
+    elif str(val) == "4":
+        try:
+            bus.write_byte(addr4,0x1)
+        except:
+            print('problem with bus 2')
+        print("2 from fb")
     else:
         try:
             bus.write_byte(addr1,0x0)
@@ -42,6 +56,14 @@ def light_toggle(_val):
             bus.write_byte(addr2,0x0)
         except:
             print('problem with bus2')
+        try:
+            bus.write_byte(addr3,0x0)
+        except:
+            print('problem with bus3')
+        try:
+            bus.write_byte(addr4,0x0)
+        except:
+            print('problem with bus4')
         print("lights off")
 
 
