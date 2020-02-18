@@ -13,7 +13,7 @@ print("start")
 
 def light_toggle(_val):
     
-    print("hello",_val)
+    print("hello git hub",_val)
     data = json.loads(_val[1])
     print(data['path'])
     print(data['data'])
