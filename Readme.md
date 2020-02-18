@@ -43,6 +43,8 @@ Following that idea to keep all connection as simple as possible, we propose to 
 * Ground  
 <img width="908" alt="Capture d’écran 2020-01-29 à 23 19 03" src="https://user-images.githubusercontent.com/5444221/73402688-22b29500-42ee-11ea-9905-94bb3b0cd77a.png">
 
+To check if i2c adress is set : i2cdetect -y 1
+
 # Part 2 : Arduino (slave)
 W.I.P
 # Part 3 : Firebase (connector)
