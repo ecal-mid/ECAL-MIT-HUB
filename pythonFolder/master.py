@@ -1,8 +1,17 @@
 import json
+import RPi.GPIO as GPIO 
 from time import sleep
 from smbus2 import SMBus,SMBusWrapper
 from firebase_streaming import Firebase
 fb = Firebase("https://esptest-73b9b.firebaseio.com/")
+
+GPIO.setmode(GPIO.BOARD)
+LED_1 = 18
+LED_2 = 16
+GPIO.setup(LED_1, GPIO.OUT)
+GPIO.setup(LED_2, GPIO.OUT)
+GPIO.output(LED_1, GPIO.HIGH)
+GPIO.output(LED_2, GPIO.HIGH)
 
 addr1=0x8
 addr2=0x9
