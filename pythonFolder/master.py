@@ -5,7 +5,7 @@ from smbus2 import SMBus,SMBusWrapper
 from firebase_streaming import Firebase
 fb = Firebase("https://esptest-73b9b.firebaseio.com/")
 
-GPIO.setmode(GPIO.BOARD)
+GPIO.setmode(GPIO.BCM)
 LED_1 = 18
 LED_2 = 16
 GPIO.setup(LED_1, GPIO.OUT)
@@ -23,7 +23,8 @@ print("start")
 
 
 def light_toggle(_val):
-    
+    GPIO.output(LED_1, GPIO.LOW)
+    GPIO.output(LED_2, GPIO.LOW)
     print("hello git hub 012",_val)
     data = json.loads(_val[1])
     print(data['path'])
@@ -74,6 +75,8 @@ def light_toggle(_val):
         except:
             print('problem with bus4')
         print("lights off")
+        GPIO.output(LED_1, GPIO.LOW)
+        GPIO.output(LED_2, GPIO.LOW)
 
 
 
