@@ -11,7 +11,7 @@ LED_2 = 16
 GPIO.setup(LED_1, GPIO.OUT)
 GPIO.setup(LED_2, GPIO.OUT)
 GPIO.output(LED_1, GPIO.HIGH)
-GPIO.output(LED_2, GPIO.HIGH)
+GPIO.output(LED_2, GPIO.LOW)
 
 addr1=0x8
 addr2=0x9
@@ -23,8 +23,7 @@ print("start")
 
 
 def light_toggle(_val):
-    GPIO.output(LED_1, GPIO.LOW)
-    GPIO.output(LED_2, GPIO.LOW)
+    GPIO.output(LED_2, GPIO.HIGH)
     print("hello git hub 012",_val)
     data = json.loads(_val[1])
     print(data['path'])
@@ -75,7 +74,6 @@ def light_toggle(_val):
         except:
             print('problem with bus4')
         print("lights off")
-        GPIO.output(LED_1, GPIO.LOW)
         GPIO.output(LED_2, GPIO.LOW)
 
 
