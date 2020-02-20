@@ -20,3 +20,4 @@ smbus==1.1.post2
 smbus2==0.3.0
 sseclient==0.0.24
 urllib3==1.25.8
+RPi.GPIO==0.7.0
