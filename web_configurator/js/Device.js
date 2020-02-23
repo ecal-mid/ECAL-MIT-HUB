@@ -82,6 +82,31 @@ class Device {
 		const connection = this.buildSelectors(data, content.connection, { hub: this.parentHUB.name, id: this.id });
 		connection.addEventListener('change', this.onChange.bind(this));
 		this.buildBlock('Your are connected to', connection);
+
+		//sending message
+		const textField2 = document.createElement('input');
+		// textField2.value = content.name;
+		textField2.setAttribute('data-hub', this.parentHUB.name);
+		textField2.setAttribute('data-id', this.id);
+		textField2.className = 'bigger';
+		this.buildBlock('You are sending', textField2);
+		textField2.addEventListener('keydown', this.onKeyDownSendAndReceived.bind(this));
+		console.log('HUBS/' + this.parentHUB.name + '/' + this.id + '/message');
+
+		this.FBListener('HUBS/' + this.parentHUB.name + '/' + this.id + '/message', textField2);
+
+		//received message
+		const textField3 = document.createElement('input');
+		// textField2.value = content.name;
+		textField3.setAttribute('data-hub', content.connection['hub_name']);
+		textField3.setAttribute('data-id', content.connection['id']);
+		textField3.className = 'bigger';
+		this.buildBlock('You are receiving', textField3);
+		textField3.addEventListener('keydown', this.onKeyDownSendAndReceived.bind(this));
+		this.FBListener(
+			'HUBS/' + content.connection['hub_name'] + '/' + content.connection['id'] + '/message',
+			textField3
+		);
 	}
 	buildBlock(_title, _htmlContent) {
 		const block = document.createElement('div');
@@ -123,6 +148,27 @@ class Device {
 		}
 	}
 
+	onKeyDownSendAndReceived(e) {
+		if (e.keyCode == 13) {
+			if (e.target.value != '' && !isNaN(e.target.value)) {
+				const hub = e.target.getAttribute('data-hub');
+				const id = e.target.getAttribute('data-id');
+				this.updateFB('/HUBS/' + hub + '/' + id + '/message/', e.target.value);
+			}
+			e.target.blur();
+		}
+	}
+	// onKeyDownReceive(e) {
+	// 	if (e.keyCode == 13) {
+	// 		if (e.target.value != '' && !isNaN(e.target.value)) {
+	// 			const hub = e.target.getAttribute('data-hub');
+	// 			const id = e.target.getAttribute('data-id');
+	// 			this.updateFB('/HUBS/' + hub + '/' + id + '/message/', e.target.value);
+	// 		}
+	// 		e.target.blur();
+	// 	}
+	// }
+
 	updateFB(path, data) {
 		const updates = {};
 		updates[path] = data;
@@ -147,6 +193,13 @@ class Device {
 			selectors.appendChild(wrapper);
 		}
 		return selectors;
+	}
+
+	FBListener(path, target) {
+		this.scope.database.ref(path).on('value', (snapshot) => {
+			const value = snapshot.val();
+			target.value = value;
+		});
 	}
 	async onChange(e) {
 		if (e.target.value != 'Please choose a device') {

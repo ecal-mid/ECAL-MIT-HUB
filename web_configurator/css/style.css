@@ -106,3 +106,8 @@ select,input{
 .selectors select{
     width: 350px;
 }
+
+.info input.bigger{
+    font-weight: bolder;
+    font-size: larger;
+}
