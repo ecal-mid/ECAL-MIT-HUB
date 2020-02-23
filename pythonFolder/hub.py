@@ -92,6 +92,7 @@ def read(_data):
                         hub = chapter[len(chapter)-3]
                         message = data['data'][address] 
                         if hub != HUB_NAME:
+                            print('path is simply / ')
                             verifyHubAndSendMessage(hub,id,message)
                         else:
                             sendMessage(ADDRESSES[str(id)]['connection']['hub_name'],ADDRESSES[str(id)]['connection']['id'],message)
@@ -104,6 +105,7 @@ def read(_data):
             id = path[2]
             message = path[3]
             if hub != HUB_NAME:
+                print('path is not simply / ')
                 verifyHubAndSendMessage(hub,id,data['data'])
             else:
                 sendMessage(ADDRESSES[str(id)]['connection']['hub_name'],ADDRESSES[str(id)]['connection']['id'],data['data'])
