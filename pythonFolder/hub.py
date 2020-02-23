@@ -30,7 +30,7 @@ def verifyHubAndSendMessage(hub,id,message):
         connection = HUBS[hub][int(id)]['connection']
         if connection['hub_name'] == HUB_NAME:
             address = ADDRESSES[str(connection['id'])]['address']
-             bus.write_byte_data(int(address,16),0,int(message))
+            bus.write_byte_data(int(address,16),0,int(message))
             print('send to :',address)
         else:
             print('connection not on that hub')
