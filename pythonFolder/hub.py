@@ -3,14 +3,26 @@ import json
 from time import sleep
 from firebase_streaming import Firebase
 from smbus2 import SMBus, SMBusWrapper
+import RPi.GPIO as GPIO 
 # don't forget the last /
 fb = Firebase("https://ecal-mit-hub.firebaseio.com/")
 
 # HUB NAME HAS TO MATCH ONLINE NAME
 HUB_NAME = "HUB ECAL"
+I2CS = {}
 ADDRESSES = {}
 ARDUINO_I2C = {}
 bus=SMBus(1)
+
+# INFO LEDS
+GPIO.setmode(GPIO.BCM)
+LED_1 = 18
+LED_2 = 16
+GPIO.setup(LED_1, GPIO.OUT)
+GPIO.setup(LED_2, GPIO.OUT)
+GPIO.output(LED_1, GPIO.HIGH)
+GPIO.output(LED_2, GPIO.LOW)
+
 
 
 def sendMessage(hub,id,message):
@@ -24,7 +36,6 @@ def sendMessage(hub,id,message):
             try:
                 print('send to device',address,message)
                 bus.write_byte_data(int(address,16),0,int(message))
-                # bus.write_byte(address,message)
             except:
                 print('error with address '+address)
         else:
@@ -38,10 +49,12 @@ def read(_data):
     # print('data',data['data'],len(data['data']))
     if data['path'] == '/':
         # init  addresses 
-        # print(data['data'][HUB_NAME])
+        # print(data['data'])
         try:
             HUB_DATA = data['data'][HUB_NAME]
             for i,address in enumerate(HUB_DATA):
+                # store all I2C For the hub
+                I2CS[str(i)] = address
                 # only get named connection
                 if address and address['name']!='undefined':
                     ADDRESSES[str(i)] = {'address':address['address'],'connection':address['connection']} 
@@ -55,7 +68,11 @@ def read(_data):
                     id = chapter[len(chapter)-2]
                     if c == 'connection':
                         # only available if ADDRESS EXIST  -----> !!! NEED A FIX
-                        ADDRESSES[str(id)]['connection'] = data['data'][address] 
+                        ADDRESSES[str(id)]['connection'] = data['data'][address]
+                    elif c == 'name':
+                        # update ADDRESSES
+                        ADDRESSES[str(id)] = {'address':I2CS[str(id)],'connection':{'hub_name':'none','id':'none'}} 
+                        ARDUINO_I2C[str(I2CS[str(id)])] = {'id':str(id),'connection':{'hub_name':'none','id':'none'}}
     else:
         try:
             # send message to other device
@@ -69,30 +86,6 @@ def read(_data):
 cb = fb.child("HUBS").listener(read)
 cb.start()
 
-# raw_input("ENTER to stop...")
-# cb.stop()
-
-
-# ------------------------------------------------> UPDATE TO WORK BASED ON ALL RECORDED ADDRESSES
-
-#Listen to slave messages
-#sleep(2)
-#while 1:
-#    try:
-#        data = bus.read_i2c_block_data(addr2,5,2)
-#        print('Offset2 {}, data {}'.format(data[0],data[1]))
-#    except:
-#        print('cannot read 0x9')
-#    try:
-#        data = bus.read_i2c_block_data(addr1,5,2)
-#        print('Offset1 {}, data {}'.format(data[0],data[1]))
-#    except:
-#        print('cannot read 0x8')
-#    sleep(0.05)
-
-
-
-
 
 sleep(2)
 while 1:
@@ -105,7 +98,7 @@ while 1:
                 print('Offset2 {}, data {}'.format(data[0],data[1]))
                 # send to FB OR HUBDATE THE HUB DIRECTLY
                 # get connection 
-                adno_connection = ARDUINO_I2C[address]['connection']
+                # adno_connection = ARDUINO_I2C[address]['connection']
                 adno_id= ARDUINO_I2C[address]['id']
                 # update FB
                 try:
