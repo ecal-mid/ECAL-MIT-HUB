@@ -91,7 +91,6 @@ def read(_data):
                     elif c == 'message':
                         hub = chapter[len(chapter)-3]
                         message = data['data'][address] 
-                        print('message from interface',hub,message)
                         if hub != HUB_NAME:
                             verifyHubAndSendMessage(hub,id,message)
                         else:
