@@ -26,6 +26,8 @@ GPIO.output(LED_2, GPIO.LOW)
 
 def verifyHubAndSendMessage(hub,id,message):
     global HUBS
+    print(HUBS)
+    print(hub,id,message)
     try:
         connection = HUBS[hub][int(id)]['connection']
         if connection['hub_name'] == HUB_NAME:
@@ -65,7 +67,8 @@ def read(_data):
         # init  addresses 
         # print(data['data'])
         try:
-            HUBS = data['data']
+            if len(HUBS)<1:
+                HUBS = data['data']
             HUB_DATA = data['data'][HUB_NAME]
             for i,address in enumerate(HUB_DATA):
                 # store all I2C For the hub
