@@ -97,7 +97,8 @@ while 1:
         try:
             # print(address)
             data = bus.read_i2c_block_data(int(address,16),5,2)
-            print('Offset2 {}, data {}'.format(data[0],data[1]))
+            if data[1]!=255:
+                print('Offset2 {}, data {}'.format(data[0],data[1]))
         except:
             pass
     sleep(0.05)
