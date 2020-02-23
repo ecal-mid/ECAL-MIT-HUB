@@ -2,6 +2,7 @@
 import json
 from time import sleep
 from firebase_streaming import Firebase
+from smbus2 import SMBus, SMBusWrapper
 # don't forget the last /
 fb = Firebase("https://ecal-mit-hub.firebaseio.com/")
 
@@ -21,7 +22,7 @@ def sendMessage(hub,id,message):
             address = ADDRESSES[str(id)]['address']
             try:
                 print('send to device',address,message)
-                # bus.write_byte_data(address,message)
+                bus.write_byte_data(int(address,16),0,int(message))
                 # bus.write_byte(address,message)
             except:
                 print('error with address '+address)
@@ -94,8 +95,8 @@ while 1:
     # check all recorded ARDUINO ADDRESSES 
     for i,address in enumerate(ARDUINO_I2C):
         try:
-            print(address)
-            # data = bus.read_i2c_block_data(int(address,16),5,2)
+            # print(address)
+            data = bus.read_i2c_block_data(int(address,16),5,2)
             print('Offset2 {}, data {}'.format(data[0],data[1]))
         except:
             pass
