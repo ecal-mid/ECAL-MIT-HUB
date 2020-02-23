@@ -26,8 +26,8 @@ GPIO.output(LED_2, GPIO.LOW)
 
 def verifyHubAndSendMessage(hub,id,message):
     global HUBS
-    print(HUBS)
-    print(hub,id,message)
+    # print(HUBS)
+    # print(hub,id,message)
     try:
         connection = HUBS[hub][int(id)]['connection']
         if connection['hub_name'] == HUB_NAME:
