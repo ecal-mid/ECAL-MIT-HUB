@@ -89,7 +89,10 @@ def read(_data):
                         ADDRESSES[str(id)] = {'address':I2CS[str(id)],'connection':{'hub_name':'none','id':'none'}} 
                         ARDUINO_I2C[str(I2CS[str(id)])] = {'id':str(id),'connection':{'hub_name':'none','id':'none'}}
                     elif c == 'message':
-                        print('message from interface')
+                        hub = = chapter[len(chapter)-3]
+                        message = data['data'][address] 
+                        print('message from interface',hub,message)
+
     else:
         try:
             # send message to other device
