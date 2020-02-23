@@ -1,0 +1,108 @@
+body{
+    font-family: 'Roboto';
+    background-color: black;
+}
+select,input{
+    font-size: larger;
+}
+.ui{
+    width:100%;
+    min-height:50px;
+    display: flex;
+    align-items: center;
+}
+
+.head-icon{
+    font-size:5vw;
+      color:white;
+}
+.hub_textField{
+    display:inline-flex;
+    font-size:4vw;
+    color:#ccc;
+     background-color: transparent;
+     border:dotted 1px #ccc;
+     border-radius:20px;
+     padding:10px;
+}
+.wrapper{
+    display:flex;
+    margin-top: 50px;
+    padding:10px;
+    background:yellow;
+    border-radius: 20px;
+    align-items: center;
+    user-select: none;
+}
+.wrapper.off{
+    opacity: 0.2;
+    pointer-events: none;
+}
+.icon{
+    text-align: center;
+    margin:10px;
+    background-color: white;
+    padding:10px;
+    border-radius:10px;
+    min-height:110px;
+    display: flex;
+    align-items: center;
+    align-content: center;
+}
+.icon i{
+    font-size:2vw;
+      color:black;
+}
+.icon span{
+    display: block;
+}
+
+.info{
+    margin:20px;
+    background-color: white;
+    padding:10px;
+    border-radius: 10px;
+    min-height:110px;
+}
+.info input{
+    border:none;
+}
+.info .title{
+     display: block;
+     font-style: italic;
+}
+.info .html {
+    display: block;
+}
+
+
+
+.info .html span{
+    font-weight: 700;
+    font-size:3vw;
+    margin: 10px;
+}
+.info .html span.small{
+    display:inline-block;
+    font-size:inherit;
+
+    max-width: 100px;
+    min-width:100px;
+    overflow: hidden;
+}
+.block{
+    display:inline-flex;
+}
+.selectors{
+    display: flex;
+    align-items: center;
+    align-content: center;
+    padding:2px;
+}
+.selectors.active{
+    background-color: black;
+    color:white;
+}
+.selectors select{
+    width: 350px;
+}
