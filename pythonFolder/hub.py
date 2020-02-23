@@ -10,6 +10,7 @@ fb = Firebase("https://ecal-mit-hub.firebaseio.com/")
 HUB_NAME = "HUB ECAL"
 ADDRESSES = {}
 ARDUINO_I2C = {}
+bus=SMBus(1)
 
 
 def sendMessage(hub,id,message):
