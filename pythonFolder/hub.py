@@ -8,6 +8,7 @@ fb = Firebase("https://ecal-mit-hub.firebaseio.com/")
 # HUB NAME HAS TO MATCH ONLINE NAME
 HUB_NAME = "HUB ECAL"
 ADDRESSES = {}
+ARDUINO_I2C = {}
 
 
 def sendMessage(hub,id,message):
@@ -21,7 +22,7 @@ def sendMessage(hub,id,message):
             try:
                 print('send to device',address,message)
                 # bus.write_byte_data(address,message)
-                bus.write_byte(address,message)
+                # bus.write_byte(address,message)
             except:
                 print('error with address '+address)
         else:
@@ -43,6 +44,7 @@ def read(_data):
                 # only get named connection
                 if address and address['name']!='undefined':
                     ADDRESSES[str(i)] = {'address':address['address'],'connection':address['connection']} 
+                    ARDUINO_I2C[address['address']] = {'connection':address['connection']}
         except:
             # if connection change
             if data['data'] is not None:
@@ -86,3 +88,15 @@ cb.start()
 #    except:
 #        print('cannot read 0x8')
 #    sleep(0.05)
+
+sleep(2)
+while 1:
+    # check all recorded ARDUINO ADDRESSES 
+    for i,address in enumerate(ARDUINO_I2C):
+        try:
+            print(address)
+            # data = bus.read_i2c_block_data(int(address,16),5,2)
+            print('Offset2 {}, data {}'.format(data[0],data[1]))
+        except:
+            pass
+    sleep(0.05)
