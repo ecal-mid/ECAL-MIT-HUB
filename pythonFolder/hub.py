@@ -45,7 +45,7 @@ def read(_data):
                 # only get named connection
                 if address and address['name']!='undefined':
                     ADDRESSES[str(i)] = {'address':address['address'],'connection':address['connection']} 
-                    ARDUINO_I2C[address['address']] = {'connection':address['connection']}
+                    ARDUINO_I2C[address['address']] = {'id':str(i),'connection':address['connection']}
         except:
             # if connection change
             if data['data'] is not None:
@@ -106,9 +106,10 @@ while 1:
                 # send to FB OR HUBDATE THE HUB DIRECTLY
                 # get connection 
                 adno_connection = ARDUINO_I2C[address]['connection']
+                adno_id= ARDUINO_I2C[address]['id']
                 # update FB
                 try:
-                    __message = fb.child('HUBS/'+adno_connection['hub_name']+'/'+adno_connection['id']+'/message')
+                    __message = fb.child('HUBS/'+HUB_NAME+'/'+adno_id+'/message')
                     __message.put(int(data[1]))
                     print('good fb put')
                 except:
