@@ -21,7 +21,7 @@ def sendMessage(hub,id,message):
             try:
                 print('send to device',address,message)
                 # bus.write_byte_data(address,message)
-                # bus.write_byte(address,0x1)
+                bus.write_byte(address,message)
             except:
                 print('error with address '+address)
         else:
