@@ -90,6 +90,10 @@ cb.start()
 #        print('cannot read 0x8')
 #    sleep(0.05)
 
+
+
+
+
 sleep(2)
 while 1:
     # check all recorded ARDUINO ADDRESSES 
@@ -102,16 +106,13 @@ while 1:
                 # send to FB OR HUBDATE THE HUB DIRECTLY
                 # get connection 
                 adno_connection = ARDUINO_I2C[address]['connection']
-                print(adno_connection)
                 # update FB
                 try:
-                    url = 'HUBS/'+adno_connection['hub_name']+'/'+adno_connection['id']+'/message'
-                    print(url,int(data[1]))
-                    fb.patch('HUBS/'+adno_connection['hub_name']+'/'+adno_connection['id']+'/message',int(data[1]))
-                    print('good patch')
+                    __message = fb.child('HUBS/'+adno_connection['hub_name']+'/'+adno_connection['id']+'/message')
+                    __message.put(int(data[1]))
+                    print('good fb put')
                 except:
-                    print('error for patching')
-
+                    print('error for fb put')
         except:
             pass
     sleep(0.05)
