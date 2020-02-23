@@ -8,7 +8,7 @@ int last_button_state = 0;
 
 void setup() {
   // Join I2C bus as slave with address 9
-  Wire.begin(0x04);
+  Wire.begin(0x08);
   Serial.begin(9600);
 
   // Call receiveEvent when data received
