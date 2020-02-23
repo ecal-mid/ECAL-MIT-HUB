@@ -12,6 +12,7 @@ HUB_NAME = "HUB ECAL"
 I2CS = {}
 ADDRESSES = {}
 ARDUINO_I2C = {}
+HUBS = {}
 bus=SMBus(1)
 
 # INFO LEDS
@@ -23,6 +24,18 @@ GPIO.setup(LED_2, GPIO.OUT)
 GPIO.output(LED_1, GPIO.HIGH)
 GPIO.output(LED_2, GPIO.LOW)
 
+def verifyHubAndSendMessage(hub,id,message):
+    global HUBS
+    try:
+        connection = HUBS[hub][int(id)]['connection']
+        if connection['hub_name'] == HUB_NAME:
+            address = ADDRESSES[str(connection['id'])]['address']
+             bus.write_byte_data(int(address,16),0,int(message))
+            print('send to :',address)
+        else:
+            print('connection not on that hub')
+    except:
+        print('error with get')
 
 
 def sendMessage(hub,id,message):
@@ -44,6 +57,7 @@ def sendMessage(hub,id,message):
        
 
 def read(_data):
+    global HUBS
     data = json.loads(_data[1])
     # print(data['path'])
     # print('data',data['data'],len(data['data']))
@@ -51,6 +65,7 @@ def read(_data):
         # init  addresses 
         # print(data['data'])
         try:
+            HUBS = data['data']
             HUB_DATA = data['data'][HUB_NAME]
             for i,address in enumerate(HUB_DATA):
                 # store all I2C For the hub
@@ -77,9 +92,13 @@ def read(_data):
         try:
             # send message to other device
             path = data['path'].split('/')
+            hub = path[1]
             id = path[2]
             message = path[3]
-            sendMessage(ADDRESSES[str(id)]['connection']['hub_name'],ADDRESSES[str(id)]['connection']['id'],data['data'])
+            if hub != HUB_NAME:
+                verifyHubAndSendMessage(hub,id,data['data'])
+            else:
+                sendMessage(ADDRESSES[str(id)]['connection']['hub_name'],ADDRESSES[str(id)]['connection']['id'],data['data'])
         except:
             print('error with splitting path')
 
