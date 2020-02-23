@@ -28,7 +28,6 @@ def sendMessage(hub,id,message):
             except:
                 print('error with address '+address)
         else:
-            # send hub name + id
             print('send to FB',hub, id,message)
 
        
@@ -100,6 +99,17 @@ while 1:
             data = bus.read_i2c_block_data(int(address,16),5,2)
             if data[1]!=255:
                 print('Offset2 {}, data {}'.format(data[0],data[1]))
+                # send to FB OR HUBDATE THE HUB DIRECTLY
+                # get connection 
+                adno_connection = ARDUINO_I2C[address]['connection']
+                print(adno_connection)
+                # update FB
+                try:
+                    fb.patch('HUBS/'+adno_connection['hub_name']+'/'+adno_connection['id'],data[1])
+                    print('good patch')
+                except:
+                    print('error for patching')
+
         except:
             pass
     sleep(0.05)
