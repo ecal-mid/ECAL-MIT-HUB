@@ -89,9 +89,13 @@ def read(_data):
                         ADDRESSES[str(id)] = {'address':I2CS[str(id)],'connection':{'hub_name':'none','id':'none'}} 
                         ARDUINO_I2C[str(I2CS[str(id)])] = {'id':str(id),'connection':{'hub_name':'none','id':'none'}}
                     elif c == 'message':
-                        hub = = chapter[len(chapter)-3]
+                        hub = chapter[len(chapter)-3]
                         message = data['data'][address] 
                         print('message from interface',hub,message)
+                        if hub != HUB_NAME:
+                            verifyHubAndSendMessage(hub,id,message)
+                        else:
+                            sendMessage(ADDRESSES[str(id)]['connection']['hub_name'],ADDRESSES[str(id)]['connection']['id'],message)
 
     else:
         try:
