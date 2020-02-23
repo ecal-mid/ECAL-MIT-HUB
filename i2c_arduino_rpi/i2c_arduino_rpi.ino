@@ -27,7 +27,7 @@ void receiveEvent(int howMany) {
   //Serial.println(howMany);
   while (Wire.available()) { // loop through all but the last
     char c = Wire.read(); // receive byte as a character
-    Serial.println(int(c));
+    //Serial.println(int(c));
     if (int(c) < 2) {
       digitalWrite(ledPin, c);
       Serial.println(int(c));
