@@ -13,6 +13,10 @@ GPIO.setup(LED_2, GPIO.OUT)
 GPIO.output(LED_1, GPIO.HIGH)
 GPIO.output(LED_2, GPIO.LOW)
 
+
+
+
+
 addr1=0x8
 addr2=0x9
 addr3=0x10

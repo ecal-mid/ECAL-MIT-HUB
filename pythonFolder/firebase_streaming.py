@@ -3,7 +3,7 @@
 from sseclient import SSEClient
 import requests
 
-from Queue import Queue
+from queue import Queue
 import json
 import threading
 import socket
@@ -140,7 +140,7 @@ class Firebase():
     def listener(self, callback=None):
 
         def handle(response):
-            print response
+            print(response)
 
         return EventListener(self.name, callback or handle)
 
