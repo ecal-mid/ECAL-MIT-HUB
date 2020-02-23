@@ -105,7 +105,7 @@ while 1:
                 print(adno_connection)
                 # update FB
                 try:
-                    fb.patch('HUBS/'+adno_connection['hub_name']+'/'+adno_connection['id'],data[1])
+                    fb.patch('HUBS/'+adno_connection['hub_name']+'/'+adno_connection['id']+'/message',data[1])
                     print('good patch')
                 except:
                     print('error for patching')
