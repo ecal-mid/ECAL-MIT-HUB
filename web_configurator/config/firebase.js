@@ -1,12 +1,12 @@
 let isAnonymous = false;
 const firebaseConfig = {
-	apiKey: 'AIzaSyDyi-PtW0m_0dK1MzX6x-Vha9W_yS19Y80',
-	authDomain: 'ecal-mit-hub.firebaseapp.com',
-	databaseURL: 'https://ecal-mit-hub.firebaseio.com',
-	projectId: 'ecal-mit-hub',
-	storageBucket: 'ecal-mit-hub.appspot.com',
-	messagingSenderId: '1088993903670',
-	appId: '1:1088993903670:web:5d9e6bac6498480b19c497'
+	apiKey: '***-***-***',
+	authDomain: '***-***.firebaseapp.com',
+	databaseURL: 'https://***-***.firebaseio.com',
+	projectId: '***-***',
+	storageBucket: '***-***.appspot.com',
+	messagingSenderId: '*************',
+	appId: '************'
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
