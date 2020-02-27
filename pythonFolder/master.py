@@ -5,13 +5,21 @@ from firebase_streaming import Firebase
 from smbus2 import SMBus, SMBusWrapper
 import RPi.GPIO as GPIO 
 import argparse
-import ifaddr
-
-adapters = ifaddr.get_adapters()
-for adapter in adapters:
-    print("IPs of network adapter {0}".format(adapter.nice_name))
-    for ip in adapter.ips:
-        print("   %s/%s" % (ip.ip, ip.network_prefix))
+import socket 
+  
+# Function to display hostname and 
+# IP address 
+def get_Host_name_IP(): 
+    try: 
+        host_name = socket.gethostname() 
+        host_ip = socket.gethostbyname(host_name) 
+        print("Hostname :  ",host_name) 
+        print("IP : ",host_ip) 
+    except: 
+        print("Unable to get Hostname and IP") 
+  
+# Driver code 
+get_Host_name_IP() #Function call 
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--id', help='firebase id (string)')
