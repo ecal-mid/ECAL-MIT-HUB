@@ -18,7 +18,6 @@ parser.add_argument('--id', help='firebase id (string)')
 parser.add_argument('--name', help='hub name')
 args = parser.parse_args()
 
-
 # don't forget the last /
 fb = Firebase("https://{0}.firebaseio.com/".format(args.id))
 
