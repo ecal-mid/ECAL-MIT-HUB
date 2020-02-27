@@ -4,11 +4,19 @@ from time import sleep
 from firebase_streaming import Firebase
 from smbus2 import SMBus, SMBusWrapper
 import RPi.GPIO as GPIO 
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--id', help='firebase id (string)')
+parser.add_argument('--name', help='hub name')
+args = parser.parse_args()
+
+
 # don't forget the last /
-fb = Firebase("https://ecal-mit-hub.firebaseio.com/")
+fb = Firebase("https://{0}.firebaseio.com/".format(args.id))
 
 # HUB NAME HAS TO MATCH ONLINE NAME
-HUB_NAME = "HUB ECAL"
+HUB_NAME = "{0}".format(args.name)
 I2CS = {}
 ADDRESSES = {}
 ARDUINO_I2C = {}
@@ -23,6 +31,8 @@ GPIO.setup(LED_1, GPIO.OUT)
 GPIO.setup(LED_2, GPIO.OUT)
 GPIO.output(LED_1, GPIO.HIGH)
 GPIO.output(LED_2, GPIO.LOW)
+
+print("hub is up and running")
 
 def verifyHubAndSendMessage(hub,id,message):
     global HUBS
@@ -70,6 +80,8 @@ def read(_data):
             if len(HUBS)<1:
                 HUBS = data['data']
             HUB_DATA = data['data'][HUB_NAME]
+            print("your HUB is called : {0}".format(HUB_NAME))
+            print("your HUB is connected to {0}".format(args.id))
             for i,address in enumerate(HUB_DATA):
                 # store all I2C For the hub
                 I2CS[str(i)] = address
