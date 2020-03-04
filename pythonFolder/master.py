@@ -122,7 +122,7 @@ def read(_data):
             id = path[2]
             message = path[3]
             if hub != HUB_NAME:
-                print('path is not simply / ')
+                print('path is not simply / '+ hub)
                 verifyHubAndSendMessage(hub,id,data['data'])
             else:
                 sendMessage(ADDRESSES[str(id)]['connection']['hub_name'],ADDRESSES[str(id)]['connection']['id'],data['data'])
@@ -150,7 +150,7 @@ while 1:
                 try:
                     __message = fb.child('HUBS/'+HUB_NAME+'/'+adno_id+'/message')
                     __message.put(int(data[1]))
-                    print('good fb put')
+                    print('good fb put to '+HUB_NAME+'/'+adno_id+' value: '+str(data[1]))
                 except:
                     print('error for fb put')
         except:
