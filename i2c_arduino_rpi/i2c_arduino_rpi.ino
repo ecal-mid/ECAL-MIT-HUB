@@ -8,7 +8,7 @@ int last_button_state = 0;
 
 void setup() {
   // Join I2C bus as slave with address 9
-  Wire.begin(0x08); 
+  Wire.begin(0x07); 
   Serial.begin(9600);
 
   // Call receiveEvent when data received
@@ -39,7 +39,7 @@ void receiveEvent(int howMany) {
 void requestEvent() {
   if (button_state != last_button_state) {
     if(button_state == 1){
-      int randNumber = random(1,99);
+     // int randNumber = random(1,99);
       writeData(1);
     }else{
        writeData(0);
@@ -59,7 +59,7 @@ void loop() {
   if (digitalRead(4) == LOW) {
     button_state = 1;
     //Serial.println("on");
-    delay(500);
+    delay(5);
   } else {
      //Serial.println("off");
     button_state = 0;
