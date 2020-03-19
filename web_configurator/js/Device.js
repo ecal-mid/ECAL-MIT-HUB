@@ -79,7 +79,10 @@ class Device {
 		//connection info
 		this.previousConnection = content.connection;
 		const data = await this.getAllHubs();
-		const connection = this.buildSelectors(data, content.connection, { hub: this.parentHUB.name, id: this.id });
+		const connection = this.buildSelectors(data, content.connection, {
+			hub: this.parentHUB.name,
+			id: this.id
+		});
 		connection.addEventListener('change', this.onChange.bind(this));
 		this.buildBlock('Your are connected to', connection);
 
@@ -107,6 +110,11 @@ class Device {
 			'HUBS/' + content.connection['hub_name'] + '/' + content.connection['id'] + '/message',
 			textField3
 		);
+
+		// I2C info
+		const _title = document.createElement('span');
+		_title.textContent = this.id;
+		this.buildBlock('Your firebase id is', _title);
 	}
 	buildBlock(_title, _htmlContent) {
 		const block = document.createElement('div');
