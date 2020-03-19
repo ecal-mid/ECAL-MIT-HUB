@@ -1,15 +1,15 @@
 const admin = require('firebase-admin');
-// const express = require('express');
+// const express = require('express'); // DEBUG
 const SerialPort = require('serialport');
 // FULL PATH OF FIREBASE CONFIG FILE
-const serviceAccount = require('/Users/gaelhugo/Documents/gitHub/ECAL-HUB/virtualhub/config/ecal-mit-hub-firebase-adminsdk-ux5en-cc8b3b6512.json');
+const serviceAccount = require('/path/to/you/firebase/config.json'); // UPDATE THIS
 const arduinoCOMPort = '/dev/cu.usbmodem145101'; // UPDATE THIS
-const HUB_NAME = 'HUB_ECAL2';
+const HUB_NAME = 'HUB_ECAL2'; // UPDATE THIS
 
 ////////////////////////////////////////////////////////////////////////
 admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount),
-	databaseURL: 'https://ecal-mit-hub.firebaseio.com'
+	databaseURL: 'https://*.firebaseio.com' /* UPDATE THIS WITH THE PROPER FB PROJECT*/
 });
 
 const ADDRESSES = {};
