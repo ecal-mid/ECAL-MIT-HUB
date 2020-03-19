@@ -30,7 +30,7 @@ void setup()
   Serial.println("Serial Ready");
 
  // Join I2C bus as slave with address 10
-  Wire.begin(0x10);
+  Wire.begin(0x12);
   Wire.onRequest(requestEvent);   // transmits data from hub
   Wire.onReceive(receiveEvent);   // receives data from hub
   Serial.println("i2c Ready");
