@@ -1,3 +1,4 @@
 *.pyc
 __pycache__
 web_configurator/config/firebase.js
+*/node_modules
