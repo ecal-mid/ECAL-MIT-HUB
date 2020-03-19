@@ -1,3 +1,7 @@
+/*
+  SIMPLE BUTTON EXAMPLE FOR VIRTUALHUB
+*/
+
 int button_state = 0;
 int last_button_state = 0;
 int prev_val = 0;
@@ -21,33 +25,12 @@ void setup() {
 
 // the loop function runs over and over again forever
 void loop() {
-  //if(Serial.available() > 0) // Read from serial port
-  //{
-  
     while(Serial.available()>0){
       String ReaderFromNode; // Store current character
       ReaderFromNode = Serial.readStringUntil('\n');
       convertToState(ReaderFromNode); // Convert character to state  
     }
 
-/*
-    if (Serial.available())
-      {
-        char myBuffer[3] = "";
-        byte index = 0;
-        while (Serial.available() and index < sizeof(myBuffer) - 1)
-        {
-          myBuffer[index++] = Serial.read();
-          myBuffer[index] = '\0';
-        }
-        // then convert to a number....
-         int number = atoi( myBuffer );
-        //Serial.println(number);
-         convertToState(number);
-      }
-*/
-    
-    
   if (digitalRead(4) == LOW) {
     button_state = 1;
     //Serial.println("on");
@@ -69,22 +52,10 @@ void loop() {
        Serial.print('e');
       }
    }
- 
   delay(100); 
 }
 
 void convertToState(String chr) {
-  /*
-  Serial.println(chr);
-  if(chr=="o"){
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(50); 
-  }
-  if(chr=="f"){
-    digitalWrite(LED_BUILTIN, LOW);
-    delay(50); 
-  }
-*/
   if(chr=="99"){
     digitalWrite(LED_BUILTIN, HIGH);
     delay(50); 
@@ -93,5 +64,4 @@ void convertToState(String chr) {
     digitalWrite(LED_BUILTIN, LOW);
     delay(50); 
   }
-  
 }
