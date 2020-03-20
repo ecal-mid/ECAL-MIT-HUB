@@ -7,6 +7,7 @@ export default class App {
 		this.canvas.width = this.w = window.innerWidth;
 		this.canvas.height = this.h = window.innerHeight;
 		this.ctx = this.canvas.getContext('2d');
+		this.ctx.fillStyle = 'white';
 		document.body.appendChild(this.canvas);
 
 		this.initFlowfield();
@@ -40,7 +41,8 @@ export default class App {
 			});
 	}
 	draw() {
-		this.ctx.clearRect(0, 0, this.w, this.h);
+		// this.ctx.clearRect(0, 0, this.w, this.h);
+		this.ctx.globalAlpha = 0.08;
 		if (this.particles && this.particles.length > 0) {
 			try {
 				this.flowfield.update();

@@ -11,7 +11,7 @@ export default class Particle {
 		this.acceleration = new Vector(0, 0);
 		this.force = new Vector(-1, 0);
 		this.maxSpeed = 1 + Math.round(Math.random() * 1);
-		this.r = 4;
+		this.r = 1;
 		this.ctx = ctx;
 	}
 	setup() {}
@@ -25,6 +25,9 @@ export default class Particle {
 		const angle = this.velocity.heading() + Utils.HALF_PI;
 		// this.ctx.globalAlpha = this.r == 2 ? 0.5 : 1;
 		// draw triangle oriented with heading
+		// const h = ;
+		// const s = ;
+		// const l = ;
 		this.ctx.save();
 		this.ctx.translate(this.position.x, this.position.y);
 		this.ctx.rotate(angle);
