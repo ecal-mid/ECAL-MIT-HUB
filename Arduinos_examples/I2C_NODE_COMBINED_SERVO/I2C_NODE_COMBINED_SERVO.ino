@@ -1,4 +1,7 @@
 #include <Wire.h>
+#include <Servo.h>
+
+Servo myServo;
 
 // LED on pin 13
 const int ledPin = LED_BUILTIN;
@@ -6,43 +9,59 @@ int receiveBuffer[9];
 int button_state = 0;
 int last_button_state = 0;
 int prev_val = 0;
+int angle = 0;
 String address = "0x7";
+bool lightIsOn = false;
+bool pressed = false;
+bool VIRTUAL_HUB = false;
 
 void setup() {
-  // Join I2C bus as slave with address 9
-  Wire.begin(0x07); 
-  Serial.begin(9600);
+   Serial.begin(9600);
 
-  // Call receiveEvent when data received
-  Wire.onReceive(receiveEvent);
-  Wire.onRequest(requestEvent);
-  //Serial.println("i2c Ready");
+  if(!VIRTUAL_HUB){
+    // Join I2C bus as slave with address 7
+    Wire.begin(0x7); 
+    // Call receiveEvent when data received
+    Wire.onReceive(receiveEvent);
+    Wire.onRequest(requestEvent);
+  }
 
   // Setup pin 13 as output and turn LED off
   pinMode(ledPin, OUTPUT);
   digitalWrite(ledPin, LOW);
   pinMode(4, INPUT_PULLUP);
 
+  //Setup Servo
+  myServo.attach(2);
+
   // !!! IMPORTANT FOR VIRTUALHUB
   // init infos
   Serial.print('b');
   Serial.print(address);
   Serial.print('e');
+  myServo.write(0);
 }
 
 void loop() {
   //DETECT BUTTON
-  if (digitalRead(4) == LOW) {
-    button_state = 1;
-    //Serial.println("on");
+  if (digitalRead(4) == HIGH && pressed == false) {
+    pressed = true;
+    lightIsOn = !lightIsOn;
+    if(lightIsOn){
+      button_state = 1;
+      }else{
+      button_state = 0;
+     }
+   
     delay(5);
-  } else {
-     //Serial.println("off");
-    button_state = 0;
+  }else if(digitalRead(4) == LOW){
+    pressed = false;
   }
-
-  checkSerial();
-  delay(100);
+  
+  if(VIRTUAL_HUB){
+    checkSerial();
+  }
+  delay(15);
 }
 
 ////////////////////// ....... SERIAL STUFF ........ //////////////////////
@@ -55,8 +74,9 @@ void checkSerial(){
     }
 
     if (button_state != last_button_state) {
-      if(button_state == 1){
-       last_button_state = 1;
+      //if(button_state == 1){
+       if(lightIsOn){
+       // last_button_state = 1;
         // BAD SOLUTION TO ENCAPSULATE VALUE
         // WE ADD A KNOWN begin CHAR b
         // WE PUT THE VALUE
@@ -66,12 +86,14 @@ void checkSerial(){
         Serial.print('b');
         Serial.print(99);
         Serial.print('e');
+        
       }else{
-        last_button_state = 0;
+       // last_button_state = 0;
          Serial.print('b');
          Serial.print(0);
          Serial.print('e');
        }
+       last_button_state = button_state;
    }
 }
 
@@ -92,14 +114,13 @@ void convertToState(String chr) {
 
 // Function that executes whenever data is received from master
 void receiveEvent(int howMany) {
- // Serial.println(howMany);
   while (Wire.available()) { // loop through all but the last
     char c = Wire.read(); // receive byte as a character
-    //Serial.println(int(c));
   if (howMany > 1) {
       char d = map(c,0,99,0,1);
       digitalWrite(ledPin, d);
-      //Serial.println(int(d));
+      int angle = map(c,0,99,0,170);
+      myServo.write(angle);
     }
 
   }
@@ -107,15 +128,15 @@ void receiveEvent(int howMany) {
 
 void requestEvent() {
   if (button_state != last_button_state) {
-    if(button_state == 1){
-     // int randNumber = random(1,99);
-      writeData(1);
+    if(lightIsOn){
+      Serial.println("on");
+      writeData(99);
     }else{
-       writeData(0);
-     }
+       Serial.println("off");
+      writeData(0);
+    }
     last_button_state = button_state;
   }
-  //Serial.println("request received");
 }
 
 void writeData(char newData) {
