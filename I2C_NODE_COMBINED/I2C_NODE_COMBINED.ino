@@ -92,13 +92,14 @@ void convertToState(String chr) {
 
 // Function that executes whenever data is received from master
 void receiveEvent(int howMany) {
-  //Serial.println(howMany);
+ // Serial.println(howMany);
   while (Wire.available()) { // loop through all but the last
     char c = Wire.read(); // receive byte as a character
     //Serial.println(int(c));
-    if (int(c) < 2) {
-      digitalWrite(ledPin, c);
-      Serial.println(int(c));
+  if (howMany > 1) {
+      char d = map(c,0,99,0,1);
+      digitalWrite(ledPin, d);
+      //Serial.println(int(d));
     }
 
   }
