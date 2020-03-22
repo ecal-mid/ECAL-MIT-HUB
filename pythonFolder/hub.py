@@ -141,4 +141,4 @@ while 1:
                     print('error for fb put')
         except:
             pass
-    sleep(0.05)
+    sleep(0.005)
