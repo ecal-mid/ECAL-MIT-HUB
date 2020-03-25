@@ -1,138 +1,171 @@
+/*
+  MIT x ECAL
+  This is a generic example that you can use as a base for developing your project
+  It works on Arduino Uno with the custom shield
+  NOTE: Virtual Hub mode require a NODE JS server running and serial communication
+  More info here https://github.com/gaelhugo/ECAL-MIT-HUB
 
-// comment or uncomment to activate/deactivate virtual HUB 
-// NOTE: Virtual Hub mode require a NODE JS server running and serial communication
-#define USE_VIRTUAL_HUB
+*/
+
+#define USE_VIRTUAL_HUB // Comment or uncomment to activate/deactivate virtual HUB
 
 #if !defined(USE_VIRTUAL_HUB)
 #include <Wire.h>
 #endif
 
+// CONSTANTS
+#define I2C_ADDR "0x7" // Update this to your attributed address 
+#define LED_PIN LED_BUILTIN // Led for basic output
+#define BTN_PIN 4 // Pin for basic input (Push Button)
 
-#include <Servo.h>
-Servo myServo;
-
-// LED on pin 13
-const int ledPin = LED_BUILTIN;
+// Global variables
 int receiveBuffer[9];
+int the_value_to_send = 0;
+int value_received = 0;
+int last_value_sent = -1;
+int last_value_received = -1;
+
+// Sketch variables
+int value_to_send = 0;
 int button_state = 0;
 int last_button_state = 0;
-int prev_val = 0;
-int angle = 0;
-String address = "0x7";
-bool lightIsOn = false;
-bool pressed = false;
-bool VIRTUAL_HUB = false;
+bool btn_pressed = false;
+
 
 void setup() {
   Serial.begin(9600);
+  delay(100);
+  // Start i2c or Serial/Node communication
+  startupCommunication();
+  delay(100);
+  // Setup Output as the builtin LED
+  pinMode(LED_PIN, OUTPUT);
+  // Setup Input
+  pinMode(BTN_PIN, INPUT_PULLUP);
+  // Turn LED off
+  digitalWrite(LED_PIN, LOW);
 
-#if !defined(USE_VIRTUAL_HUB)
-  // Join I2C bus as slave with address 7
-  Wire.begin(0x7);
-  // Callbacks receiveEvent when data received
-  Wire.onReceive(receiveEvent);
-  Wire.onRequest(requestEvent);
-#endif
-
-  // Setup pin 13 as output and turn LED off
-  pinMode(ledPin, OUTPUT);
-  digitalWrite(ledPin, LOW);
-  pinMode(4, INPUT_PULLUP);
-
-  //Setup Servo
-  myServo.attach(2);
-
-
-#if defined(USE_VIRTUAL_HUB)
-  // !!! IMPORTANT FOR VIRTUALHUB
-  // init infos
-  Serial.print('b');
-  Serial.print(address);
-  Serial.print('e');
-#endif
-
-  myServo.write(0);
 }
 
 void loop() {
-  //DETECT BUTTON
-  if (digitalRead(4) == HIGH && pressed == false) {
-    pressed = true;
-    lightIsOn = !lightIsOn;
-    if (lightIsOn) {
-      button_state = 1;
-    } else {
-      button_state = 0;
-    }
+  /////////   INPUT EXAMPLE /////////
+  // Detect Button press
+  if (digitalRead(BTN_PIN) == LOW && btn_pressed == false) {
+    button_state = !button_state;
+    btn_pressed = true;
+    digitalWrite(LED_PIN, button_state);
+    delay(10); // keeps a small delay
+    Serial.println(button_state);
+    //
+    value_to_send = map(button_state, 0, 1, 0, 99);
 
-    delay(5);
-  } else if (digitalRead(4) == LOW) {
-    pressed = false;
+  } else if (digitalRead(BTN_PIN) == HIGH) {
+    btn_pressed = false;
   }
 
-  if (VIRTUAL_HUB) {
-    checkSerial();
+  setDataToSend(value_to_send);
+
+  /////////  OUTPUT EXAMPLE /////////
+#if defined(USE_VIRTUAL_HUB)
+  checkDataFromNode();
+#endif
+
+  if (value_received != last_value_received) {
+    // new value has beed received
+    // update your output
+    digitalWrite(LED_PIN, map(value_received, 0, 99, 0, 1)); // simple example with LED
+    value_received = last_value_received;
   }
-  delay(15);
-}
-
-// TOP LEVEL Functions to send and Recieve Data
-
-void sendDataToHub(int data_value) {
-  i2cWriteData(char newData)
-}
-
-void UpdateDataFromHub() {
 
 }
 
-////////////////////// ....... SERIAL STUFF ........ //////////////////////
 
-void checkSerial() {
+
+/*
+
+  NO EDIT SHOULD BE REQUIRED UNDER THIS LINE
+
+*/
+
+void startupCommunication() {
+
+#if defined(USE_VIRTUAL_HUB)
+  // !!! IMPORTANT FOR VIRTUALHUB
+  // Init infos
+  Serial.print('b');
+  Serial.print(I2C_ADDR);
+  Serial.print('e');
+  // Startup message
+  Serial.println(" ");
+  Serial.println("NODE - VIRTUAL HUB MODE");
+  Serial.print("Serial connection with Node started with i2c address: ");
+  Serial.println(I2C_ADDR);
+  Serial.println(" ");
+
+#else
+  // I2C
+  // Join I2C bus as slave
+  Wire.begin(char(I2C_ADDR));
+  // Callbacks receiveEvent when data received
+  Wire.onReceive(receiveEvent);
+  Wire.onRequest(requestEvent);
+  // Startup message
+  Serial.println(" ");
+  Serial.println("I2C - REAL HUB MODE");
+  Serial.print("Wire started as slave with i2c address: ");
+  Serial.print(I2C_ADDR);
+  Serial.println(" ");
+#endif
+}
+
+void setDataToSend(int data_value) {
+
+  if (data_value < 0 || data_value > 99) {
+    Serial.println("error the value must range from 0 to 99");
+    Serial.print("value was: ");
+    Serial.println(data_value);
+    return;
+  }
+
+  the_value_to_send = data_value;
+
+#if defined(USE_VIRTUAL_HUB)
+  writeDataToNode();
+#endif
+
+
+}
+
+
+/* VIRTUAL HUB FUNCTIONS */
+#if defined(USE_VIRTUAL_HUB)
+
+void checkDataFromNode() {
   while (Serial.available() > 0) {
     String ReaderFromNode; // Store current character
     ReaderFromNode = Serial.readStringUntil('\n');
-    convertToState(ReaderFromNode); // Convert character to state
-  }
-
-  if (button_state != last_button_state) {
-    //if(button_state == 1){
-    if (lightIsOn) {
-      // last_button_state = 1;
-      // BAD SOLUTION TO ENCAPSULATE VALUE
-      // WE ADD A KNOWN begin CHAR b
-      // WE PUT THE VALUE
-      // WE ADD A KNOWN end CHAR e
-      //--> on the virutal hub, we can get the proper value
-      // need to be optimized
-      Serial.print('b');
-      Serial.print(99);
-      Serial.print('e');
-
-    } else {
-      // last_button_state = 0;
-      Serial.print('b');
-      Serial.print(0);
-      Serial.print('e');
-    }
-    last_button_state = button_state;
+    value_received = (ReaderFromNode.toInt());
   }
 }
 
-void convertToState(String chr) {
-  if (chr == "99") {
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(50);
-  }
-  if (chr == "0") {
-    digitalWrite(LED_BUILTIN, LOW);
-    delay(50);
+void writeDataToNode() {
+  // BAD SOLUTION TO ENCAPSULATE VALUE
+  // WE ADD A KNOWN begin CHAR b
+  // WE PUT THE VALUE
+  // WE ADD A KNOWN end CHAR e
+  //--> on the virutal hub, we can get the proper value
+  // need to be optimized
+  if (the_value_to_send != last_value_sent) {
+    Serial.print('b');
+    Serial.print(the_value_to_send);
+    Serial.print('e');
+    last_value_sent = the_value_to_send;
   }
 }
 
+#endif
 
-////////////////////// ....... I2C STUFF ........ //////////////////////
-
+/* I2C HUB FUNCTIONS */
 #if !defined(USE_VIRTUAL_HUB)
 
 // Function that executes whenever data is received from master
@@ -140,29 +173,19 @@ void receiveEvent(int howMany) {
   while (Wire.available()) { // loop through all but the last
     char c = Wire.read(); // receive byte as a character
     if (howMany > 1) {
-      char d = map(c, 0, 99, 0, 1);
-      digitalWrite(ledPin, d);
-      int angle = map(c, 0, 99, 0, 170);
-      myServo.write(angle);
+      value_received = c;
     }
-
   }
 }
 
 void requestEvent() {
-  if (button_state != last_button_state) {
-    if (lightIsOn) {
-      Serial.println("on");
-      writeData(99);
-    } else {
-      Serial.println("off");
-      writeData(0);
-    }
-    last_button_state = button_state;
+  if (the_value_to_send != last_value_sent) {
+    writeDataToi2c(the_value_to_send);
+    last_value_sent = the_value_to_send;
   }
 }
 
-void i2cWriteData(char newData) {
+void writeDataToi2c(char newData) {
   char data[] = {5, newData};
   int dataSize = sizeof(data);
   Wire.write(data, dataSize);
