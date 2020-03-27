@@ -16,7 +16,7 @@
 // CONSTANTS
 #define I2C_ADDR 7 // Update this to your attributed address 
 #define LED_PIN LED_BUILTIN // Led for basic output
-#define BTN_PIN 4 // Pin for basic input (Push Button)
+#define BTN_PIN 2 // Pin for basic input (Push Button)
 
 // Global variables
 int receiveBuffer[9];
