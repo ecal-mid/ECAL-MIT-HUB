@@ -14,7 +14,7 @@
 #endif
 
 // CONSTANTS
-#define I2C_ADDR "0x7" // Update this to your attributed address 
+#define I2C_ADDR 7 // Update this to your attributed address 
 #define LED_PIN LED_BUILTIN // Led for basic output
 #define BTN_PIN 4 // Pin for basic input (Push Button)
 
@@ -44,8 +44,8 @@ void setup() {
   pinMode(BTN_PIN, INPUT_PULLUP);
   // Turn LED off
   digitalWrite(LED_PIN, LOW);
-
 }
+
 
 void loop() {
   /////////   INPUT EXAMPLE /////////
@@ -53,7 +53,7 @@ void loop() {
   if (digitalRead(BTN_PIN) == LOW && btn_pressed == false) {
     button_state = !button_state;
     btn_pressed = true;
-    digitalWrite(LED_PIN, button_state);
+    // digitalWrite(LED_PIN, button_state);
     delay(10); // keeps a small delay
     Serial.println(button_state);
     //
@@ -92,9 +92,9 @@ void startupCommunication() {
 #if defined(USE_VIRTUAL_HUB)
   // !!! IMPORTANT FOR VIRTUALHUB
   // Init infos
-  Serial.print('b');
+  Serial.print('*');
   Serial.print(I2C_ADDR);
-  Serial.print('e');
+  Serial.print('%');
   // Startup message
   Serial.println(" ");
   Serial.println("NODE - VIRTUAL HUB MODE");
@@ -156,9 +156,9 @@ void writeDataToNode() {
   //--> on the virutal hub, we can get the proper value
   // need to be optimized
   if (the_value_to_send != last_value_sent) {
-    Serial.print('b');
+    Serial.print('*');
     Serial.print(the_value_to_send);
-    Serial.print('e');
+    Serial.print('%');
     last_value_sent = the_value_to_send;
   }
 }
