@@ -119,7 +119,7 @@ void startupCommunication() {
 }
 
 void setDataToSend(int data_value) {
-  constrain(data_value, 0, 99); // in case the value is out of range
+  data_value = constrain(data_value, 0, 99); // in case the value is out of range
   the_value_to_send = data_value;
 
 #if defined(USE_VIRTUAL_HUB)
