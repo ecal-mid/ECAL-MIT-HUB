@@ -2,14 +2,14 @@ const admin = require('firebase-admin');
 // const express = require('express'); // DEBUG
 const SerialPort = require('serialport');
 // FULL PATH OF FIREBASE CONFIG FILE
-const serviceAccount = require('/path/to/you/firebase/config.json'); // UPDATE THIS
-const arduinoCOMPort = '/dev/cu.usbmodem145101'; // UPDATE THIS
+const serviceAccount = require('/Users/gaelhugo/Documents/gitHub/ECAL-HUB/virtualhub/config/ecal-mit-hub-firebase-adminsdk-ux5en-cc8b3b6512.json'); // UPDATE THIS
+const arduinoCOMPort = '/dev/cu.usbmodem14501'; // UPDATE THIS
 const HUB_NAME = 'HUB_ECAL2'; // UPDATE THIS
 
 ////////////////////////////////////////////////////////////////////////
 admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount),
-	databaseURL: 'https://*.firebaseio.com' /* UPDATE THIS WITH THE PROPER FB PROJECT*/
+	databaseURL: 'https://ecal-mit-hub.firebaseio.com' /* UPDATE THIS WITH THE PROPER FB PROJECT*/
 });
 
 const ADDRESSES = {};
@@ -74,12 +74,12 @@ function iniArduino() {
 		str = data.toString(); //Convert to string
 		str = str.replace(/\r?\n|\r/g, ''); //remove '\r' from this String
 		receivedData += str;
-		if (receivedData.indexOf('e') >= 0 && receivedData.indexOf('b') >= 0) {
+		if (receivedData.indexOf('%') >= 0 && receivedData.indexOf('*') >= 0) {
 			// save the data between 'B' and 'E'
-			sendData = receivedData.substring(receivedData.indexOf('b') + 1, receivedData.indexOf('e'));
+			sendData = receivedData.substring(receivedData.indexOf('*') + 1, receivedData.indexOf('%'));
 			receivedData = '';
 			if (!connected_device) {
-				connected_device = sendData;
+				connected_device = '0x' + sendData;
 				console.log(connected_device);
 			} else {
 				//send to firebase
