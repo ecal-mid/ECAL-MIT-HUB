@@ -1,9 +1,14 @@
+/*
+	COMMAND LINE TO USE
+	node app.js name/of/your/arduino/port
+*/
+
 const admin = require('firebase-admin');
 // const express = require('express'); // DEBUG
 const SerialPort = require('serialport');
 // FULL PATH OF FIREBASE CONFIG FILE
-const serviceAccount = require('/Users/gaelhugo/Documents/gitHub/ECAL-HUB/virtualhub/config/ecal-mit-hub-firebase-adminsdk-ux5en-cc8b3b6512.json'); // UPDATE THIS
-const arduinoCOMPort = '/dev/cu.usbmodem14501'; // UPDATE THIS
+const serviceAccount = require('/path/of/your/firebase/config.json'); // UPDATE THIS
+const arduinoCOMPort = process.argv[2];
 const HUB_NAME = 'HUB_ECAL2'; // UPDATE THIS
 
 ////////////////////////////////////////////////////////////////////////
