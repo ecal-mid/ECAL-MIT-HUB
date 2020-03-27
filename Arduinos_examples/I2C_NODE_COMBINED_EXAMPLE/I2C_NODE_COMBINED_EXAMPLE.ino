@@ -119,14 +119,7 @@ void startupCommunication() {
 }
 
 void setDataToSend(int data_value) {
-
-  if (data_value < 0 || data_value > 99) {
-    Serial.println("error the value must range from 0 to 99");
-    Serial.print("value was: ");
-    Serial.println(data_value);
-    return;
-  }
-
+  constrain(data_value, 0, 99); // in case the value is out of range
   the_value_to_send = data_value;
 
 #if defined(USE_VIRTUAL_HUB)
@@ -160,6 +153,7 @@ void writeDataToNode() {
     Serial.print(the_value_to_send);
     Serial.print('%');
     last_value_sent = the_value_to_send;
+    delay(15);
   }
 }
 
