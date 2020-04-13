@@ -7,9 +7,9 @@ const admin = require('firebase-admin');
 // const express = require('express'); // DEBUG
 const SerialPort = require('serialport');
 // FULL PATH OF FIREBASE CONFIG FILE
-const serviceAccount = require('/path/of/your/firebase/config.json'); // UPDATE THIS
+const serviceAccount = require('/Users/gaelhugo/Documents/gitHub/ECAL-HUB/virtualhub/config/ecal-mit-hub-firebase-adminsdk-ux5en-cc8b3b6512.json'); // UPDATE THIS
 const arduinoCOMPort = process.argv[2];
-const HUB_NAME = 'HUB_ECAL2'; // UPDATE THIS
+const HUB_NAME = 'HUB_MIT1'; // UPDATE THIS
 
 ////////////////////////////////////////////////////////////////////////
 admin.initializeApp({
@@ -44,19 +44,23 @@ db.ref('HUBS').on(
 );
 
 function readMessage() {
-	// get connection
-	const local = ADDRESSES[connected_device];
-	// get id for connected device
-	const id = local['connection']['id'];
-	const hub = local['connection']['hub_name'];
-	const message = FULL_DATA[hub][id]['message'];
+	try {
+		// get connection
+		const local = ADDRESSES[connected_device];
+		// get id for connected device
+		const id = local['connection']['id'];
+		const hub = local['connection']['hub_name'];
+		const message = FULL_DATA[hub][id]['message'];
 
-	// send that info to the device -->
-	// add new line for arduino
-	arduinoSerialPort.write(message + '\n');
+		// send that info to the device -->
+		// add new line for arduino
+		arduinoSerialPort.write(message + '\n');
 
-	console.log('----');
-	console.log(message, id, hub);
+		console.log('----');
+		console.log(message, id, hub);
+	} catch (error) {
+		console.log('Please verify you have a connected device', error);
+	}
 }
 
 let receivedData = '';
