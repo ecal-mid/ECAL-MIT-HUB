@@ -5,6 +5,9 @@ body{
 select,input{
     font-size: larger;
 }
+input.normal{
+    font-size: smaller;
+}
 .ui{
     width:100%;
     min-height:50px;

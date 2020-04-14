@@ -41,6 +41,17 @@ class Hub {
 		const selector = this.buildSelector(this.addresses);
 		selector.addEventListener('change', this.changeHandler);
 		this.wrapper.appendChild(selector);
+
+		// add link to webcam
+		//received message
+		const textField = document.createElement('input');
+		// textField.value = 'http://108.20.26.144:8081/';
+		textField.setAttribute('data-hub', this.name);
+		// textField.setAttribute('data-id', content.connection['id']);
+		textField.className = 'normal';
+		this.buildBlock('WebCam', textField);
+		textField.addEventListener('keydown', this.onKeyDownSendAndReceived.bind(this));
+		this.FBListener('WEBCAMS/' + this.name + '/webcam', textField);
 	}
 
 	buildSelector(addresses, connection, active, hub) {
@@ -68,7 +79,6 @@ class Hub {
 			} else if (address.name != 'undefined' && (address_keys[i] != active.id || active.hub != hub)) {
 				option.textContent = address.name + ' ** ' + types[address.type];
 				selector.appendChild(option);
-				console.log(this.name, connection.hub_name);
 				if (option.value == connection.id && hub == connection.hub_name) {
 					option.selected = true;
 				}
@@ -107,5 +117,69 @@ class Hub {
 		while (elements.length > 0) {
 			elements[0].parentNode.removeChild(elements[0]);
 		}
+	}
+
+	buildBlock(_title, _htmlContent) {
+		const block = document.createElement('div');
+		block.className = 'block';
+		const info = document.createElement('div');
+		info.className = 'info';
+		const title = document.createElement('div');
+		title.className = 'title';
+		title.innerHTML = '<a href="' + _htmlContent.value + '" target="_blank">' + _title + '</a>';
+		info.appendChild(title);
+		const html = document.createElement('div');
+		html.className = 'html';
+		html.appendChild(_htmlContent);
+		info.appendChild(html);
+		block.appendChild(info);
+		this.wrapper.appendChild(block);
+	}
+
+	onKeyDownSendAndReceived(e) {
+		if (e.keyCode == 13) {
+			if (e.target.value == '' || this.validateIPaddress(e.target.value)) {
+				const hub = e.target.getAttribute('data-hub');
+				this.updateFB('/WEBCAMS/' + hub + '/webcam/', e.target.value);
+			}
+			e.target.blur();
+		}
+	}
+
+	updateFB(path, data) {
+		const updates = {};
+		updates[path] = data;
+		this.scope.database.ref().update(updates);
+	}
+
+	validateIPaddress(ipaddress) {
+		if (
+			/^http:\/\/(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\:[0-9]{1,4}\/$/.test(
+				ipaddress
+			)
+		) {
+			return true;
+		}
+		return false;
+	}
+
+	FBListener(path, target) {
+		this.scope.database.ref(path).on('value', (snapshot) => {
+			const value = snapshot.val();
+			target.value = value;
+			if (
+				target.parentNode.parentNode.getElementsByClassName('title')[0].getElementsByTagName('a').length > 0 &&
+				value
+			) {
+				target.parentNode.parentNode
+					.getElementsByClassName('title')[0]
+					.getElementsByTagName('a')[0].href = value;
+			} else if (value) {
+				target.parentNode.parentNode.getElementsByClassName('title')[0].innerHTML =
+					'<a href="' + value + '" target="_blank">Webcam</a>';
+			} else {
+				target.parentNode.parentNode.getElementsByClassName('title')[0].innerHTML = 'No webcam yet.';
+			}
+		});
 	}
 }
