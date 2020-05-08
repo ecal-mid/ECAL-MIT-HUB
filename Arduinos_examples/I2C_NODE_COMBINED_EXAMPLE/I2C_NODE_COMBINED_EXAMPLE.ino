@@ -74,7 +74,7 @@ void loop() {
     // new value has beed received
     // update your output
     digitalWrite(LED_PIN, map(value_received, 0, 99, 0, 1)); // simple example with LED
-    value_received = last_value_received;
+    last_value_received = value_received;
   }
 
 }
