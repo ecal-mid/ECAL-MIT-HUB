@@ -1,6 +1,6 @@
 /*
 	COMMAND LINE TO USE
-	node app.js name/of/your/arduino/port
+	node app.js /dev/cu.usbmodem146101
 */
 
 const admin = require('firebase-admin');
@@ -9,7 +9,7 @@ const SerialPort = require('serialport');
 // FULL PATH OF FIREBASE CONFIG FILE
 const serviceAccount = require('/Users/gaelhugo/Documents/gitHub/ECAL-HUB/virtualhub/config/ecal-mit-hub-firebase-adminsdk-ux5en-cc8b3b6512.json'); // UPDATE THIS
 const arduinoCOMPort = process.argv[2];
-const HUB_NAME = 'HUB_MIT1'; // UPDATE THIS
+const HUB_NAME = 'HUB_ECAL2'; // UPDATE THIS
 
 ////////////////////////////////////////////////////////////////////////
 admin.initializeApp({
@@ -22,6 +22,7 @@ const ADDRESSES_ID = {};
 let FULL_DATA = null;
 let hub_started = false;
 let connected_device = null;
+const USE_DEDICATED_MESSAGE = true;
 // Get a database reference to our posts
 const db = admin.database();
 db.ref('HUBS').on(
@@ -29,13 +30,16 @@ db.ref('HUBS').on(
 	(snapshot) => {
 		// --> ALL HUBS AND CONNECTIONS
 		let data = snapshot.val();
+		//console.log(snapshot);
 		FULL_DATA = data;
 		initDatas(data);
 		if (!hub_started) {
 			iniArduino();
 			hub_started = true;
 		} else {
-			readMessage();
+			if (!USE_DEDICATED_MESSAGE) {
+				readMessage();
+			}
 		}
 	},
 	(errorObject) => {
@@ -90,6 +94,22 @@ function iniArduino() {
 			if (!connected_device) {
 				connected_device = '0x' + sendData;
 				console.log(connected_device);
+
+				// VERSION FOR MALIK --> specific listener by device
+				// get connection
+				const local = ADDRESSES[connected_device];
+				// get id for connected device
+				const id = local['connection']['id'];
+				const hub = local['connection']['hub_name'];
+				if (USE_DEDICATED_MESSAGE) {
+					db.ref('HUBS/' + HUB_NAME + '/' + id + '/message').on('value', (snapshot) => {
+						// --> READ DEDCATED MESSAGE
+						const message = snapshot.val();
+						arduinoSerialPort.write(message + '\n');
+						console.log('DEDICATED RECEIVED ----');
+						console.log(message, id, hub);
+					});
+				}
 			} else {
 				//send to firebase
 				console.log('send to firebase', sendData);
