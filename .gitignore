@@ -3,3 +3,4 @@ __pycache__
 web_configurator/config/firebase.js
 */node_modules
 virtualhub/config
+web_example/config
