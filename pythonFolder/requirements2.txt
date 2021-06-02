@@ -17,4 +17,4 @@ requests-toolbelt==0.8.0
 rsa==4.0
 six==1.14.0
 sseclient==0.0.24
-urllib3==1.25.8
+urllib3==1.26.5
